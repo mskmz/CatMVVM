@@ -1,0 +1,2 @@
+include ':app', ':catmvvm-core', ':catmvvm-base'
+rootProject.name='CatMvvm'
