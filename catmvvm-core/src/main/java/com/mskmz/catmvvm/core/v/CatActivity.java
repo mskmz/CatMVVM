@@ -39,7 +39,7 @@ public class CatActivity
         super.onCreate(savedInstanceState);
         mViewHelp = new BaseViewHelp(this);
         mAnnNoticeHelp = new OnNoticeAnnHelp(this);
-        DataBindingUtil.setContentView(
+        mDb = DataBindingUtil.setContentView(
                 this,
                 ViewUtils.getRes(
                         this,

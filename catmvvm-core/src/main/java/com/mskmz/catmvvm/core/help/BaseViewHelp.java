@@ -34,7 +34,7 @@ public class BaseViewHelp implements CatBaseView {
     public void bindVm(ViewDataBinding db) {
         ViewUtils.scanDatabing(db);
         try {
-            Map<String, CatBaseViewModel> map = ViewUtils.bindVmList(db, this, ViewUtils.scanDatabing(db));
+            Map<String, CatBaseViewModel> map = ViewUtils.bindVmList(db, mV, ViewUtils.scanDatabing(db));
             for (Map.Entry<String, CatBaseViewModel> entry : map.entrySet()) {
                 registerLife(mV, entry.getValue());
             }

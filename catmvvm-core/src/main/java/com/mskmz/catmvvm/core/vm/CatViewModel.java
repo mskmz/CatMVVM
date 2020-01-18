@@ -1,5 +1,7 @@
 package com.mskmz.catmvvm.core.vm;
 
+import android.util.Log;
+
 import androidx.lifecycle.LifecycleObserver;
 
 import com.mskmz.catmvvm.core.help.OnNoticeAnnHelp;
@@ -14,6 +16,12 @@ public class CatViewModel<T extends CatBaseView> implements CatBaseViewModel<T>,
 
     //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>  Static Final >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
+
+    //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>  TAG  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    private static final String TAG = "CatViewModel>>>";
+    private static final boolean isDebug = true;
+    //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<  TAG  <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
     private WeakReference<T> view;
     private OnNoticeAnnHelp mAnnNoticeHelp;
 
@@ -22,7 +30,7 @@ public class CatViewModel<T extends CatBaseView> implements CatBaseViewModel<T>,
     //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<  Field  <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>  Constructor  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-    CatViewModel() {
+    public CatViewModel() {
         mAnnNoticeHelp = new OnNoticeAnnHelp(this);
         ShardModelManager.INSTANCE().checkClass(this);
     }
@@ -36,7 +44,11 @@ public class CatViewModel<T extends CatBaseView> implements CatBaseViewModel<T>,
 
     @Override
     public void noticeView(int msgTag, Object msgObj) {
-
+        if (getView() == null) {
+            return;
+        }
+        Log.d(TAG, "noticeView: " + getView().getClass());
+        getView().onViewModelListen(msgTag, msgObj);
     }
 
     @Override
