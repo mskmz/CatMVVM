@@ -51,7 +51,7 @@ public class CatModel
 
     public CatModel() {
         ShardModelManager.INSTANCE().checkClass(this);
-        addOnPropertyChangedCallback(mWeakCallBack);
+        super.addOnPropertyChangedCallback(mWeakCallBack);
     }
 
     @Override
@@ -60,6 +60,7 @@ public class CatModel
     }
 
     public void Log() {
+        if (!isDebug) return;
         try {
             Class observable = Class.forName("androidx.databinding.BaseObservable");
             Field f = observable.getDeclaredField("mCallbacks");
@@ -70,7 +71,17 @@ public class CatModel
             Field f2 = c.getDeclaredField("mCallbacks");
             f2.setAccessible(true);
             ArrayList list = (ArrayList) f2.get(p);
-            if (isDebug) Log.d(TAG, "Log: " + list.size());
+            Log.d(TAG, "Log: " + list.size());
+
+            for (WeakReference<OnPropertyChangedCallback> callback : mCallBacks) {
+                OnPropertyChangedCallback onCall = callback.get();
+                if (onCall == null) {
+                    mCallBacks.remove(callback);
+                }
+            }
+            Log.d(TAG, "Log: " + mCallBacks.size());
+
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -84,13 +95,13 @@ public class CatModel
         addOnPropertyChangedCallback(callback);
     }
 
-//    @Override
-//    public void addOnPropertyChangedCallback(@NonNull OnPropertyChangedCallback callback) {
-//        if (mCallBacks == null) {
-//            mCallBacks = new ArrayList<>();
-//        }
-//        mCallBacks.add(new WeakReference<>(callback));
-//    }
+    @Override
+    public void addOnPropertyChangedCallback(@NonNull OnPropertyChangedCallback callback) {
+        if (mCallBacks == null) {
+            mCallBacks = new ArrayList<>();
+        }
+        mCallBacks.add(new WeakReference<>(callback));
+    }
 
     @Override
     public void addCallbackLink(OnPropertyChangedCallback callback) {
