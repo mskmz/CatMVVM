@@ -46,6 +46,7 @@ public class CatActivity
                         ClassUtils.getParaClass(this.getClass(), 0).getSimpleName()
                 ));
         bindVm();
+
         init();
     }
 

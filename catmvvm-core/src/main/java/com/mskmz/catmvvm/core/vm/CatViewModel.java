@@ -2,17 +2,24 @@ package com.mskmz.catmvvm.core.vm;
 
 import android.util.Log;
 
+import androidx.databinding.Observable;
 import androidx.lifecycle.LifecycleObserver;
 
 import com.mskmz.catmvvm.core.help.OnNoticeAnnHelp;
 import com.mskmz.catmvvm.core.inter.CatBaseView;
 import com.mskmz.catmvvm.core.inter.CatBaseViewModel;
 import com.mskmz.catmvvm.core.manager.ShardModelManager;
+import com.mskmz.catmvvm.core.manager.SupportShard;
 import com.mskmz.catmvvm.core.notice.NoticeType;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.List;
 
-public class CatViewModel<T extends CatBaseView> implements CatBaseViewModel<T>, LifecycleObserver {
+public class CatViewModel<T extends CatBaseView>
+        implements CatBaseViewModel<T>,
+        LifecycleObserver,
+        SupportShard {
 
     //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>  Static Final >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
@@ -22,17 +29,20 @@ public class CatViewModel<T extends CatBaseView> implements CatBaseViewModel<T>,
     private static final boolean isDebug = true;
     //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<  TAG  <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-    private WeakReference<T> view;
-    private OnNoticeAnnHelp mAnnNoticeHelp;
 
     //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<  Static Final <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>  Field  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    private List<Observable.OnPropertyChangedCallback> mDependCallBack;
+    private WeakReference<T> view;
+    private OnNoticeAnnHelp mAnnNoticeHelp;
+
     //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<  Field  <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>  Constructor  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
     public CatViewModel() {
         mAnnNoticeHelp = new OnNoticeAnnHelp(this);
         ShardModelManager.INSTANCE().checkClass(this);
+        init();
     }
     //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<  Constructor  <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>  Method Override  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -54,6 +64,7 @@ public class CatViewModel<T extends CatBaseView> implements CatBaseViewModel<T>,
     @Override
     public void bindView(T v) {
         view = new WeakReference<>(v);
+        
     }
 
     @Override
@@ -67,6 +78,15 @@ public class CatViewModel<T extends CatBaseView> implements CatBaseViewModel<T>,
     //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>  Method protect  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
     protected void init() {
+        if (isDebug) Log.d(TAG, "init: start");
+    }
+
+    @Override
+    public void addCallbackLink(Observable.OnPropertyChangedCallback callback) {
+        if (mDependCallBack == null) {
+            mDependCallBack = new ArrayList<>();
+        }
+        mDependCallBack.add(callback);
     }
 
     //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<  Method protect  <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

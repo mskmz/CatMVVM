@@ -3,15 +3,20 @@ package com.mskmz.catmvvm.core.manager;
 import android.os.Handler;
 import android.os.Message;
 import android.util.ArrayMap;
+import android.util.Log;
 import android.util.SparseArray;
 
 import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
+import androidx.databinding.Observable;
+import androidx.databinding.ViewDataBinding;
 
 import com.mskmz.catmvvm.core.Utils.IdUtils;
 import com.mskmz.catmvvm.core.annotaion.CatAutoInjection;
 import com.mskmz.catmvvm.core.annotaion.CatAutoWire;
 import com.mskmz.catmvvm.core.constant.CatConfig;
 import com.mskmz.catmvvm.core.m.CatModel;
+import com.mskmz.catmvvm.core.vm.CatViewModel;
 
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
@@ -24,6 +29,12 @@ import java.util.Set;
 
 //使用该类暂存所有被写入的数据
 public class ShardModelManager {
+
+
+    //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>  TAG  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    private static final String TAG = "ShardModelManager>>>";
+    private static final boolean isDebug = true;
+    //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<  TAG  <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
     //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>单例模式>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
     public static ShardModelManager INSTANCE() {
@@ -125,6 +136,7 @@ public class ShardModelManager {
         return mCacheMap.get(tag);
     }
 
+
     //直接解析一个类
     public void checkClass(Object obj) {
         Class clazz = obj.getClass();
@@ -132,25 +144,31 @@ public class ShardModelManager {
             return;
         }
         Field[] fields = clazz.getDeclaredFields();
-        CatAutoInjection ann = null;
+        CatAutoInjection ann;
         for (Field f : fields) {
             ann = f.getAnnotation(CatAutoInjection.class);
             if (ann == null) {
                 continue;
             }
+            if (isDebug)
+                Log.d(TAG, "checkClass: 尝试解析- class - " + clazz.getSimpleName() + " - field - " + f.getName());
             int tag = ann.id();
             if (tag < 0) {
                 tag = ann.value();
             }
             if (tag < 0) {
-                tag = generateId(clazz);
+                tag = generateId(f.getType());
             }
+            if (isDebug)
+                Log.d(TAG, "checkClass:  tag - " + tag);
+            if (isDebug) Log.d(TAG, "checkClass: tag - " + f.getType());
             if (ann.forever()) {
                 mIgnoreSet.add(tag);
             }
             registerData(obj, tag, f.getType());
             try {
                 f.set(obj, checkoutData(tag));
+
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             }
@@ -254,6 +272,6 @@ public class ShardModelManager {
     //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<  Method private  <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>  Class inner  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
     //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<  Class inner  <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-
 }
+
+
