@@ -28,6 +28,7 @@ public class CatModel
     //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<  TAG  <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
     //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>  解决内存泄露  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    private boolean isShard = false;
     private List<OnPropertyChangedCallback> mDependCallBack;
     private List<WeakReference<OnPropertyChangedCallback>> mCallBacks;
 
@@ -55,8 +56,8 @@ public class CatModel
     }
 
     @Override
-    public CatBaseModel singleCreate() {
-        return this;
+    public void shardCreate() {
+        isShard = true;
     }
 
     public void Log() {
@@ -71,7 +72,6 @@ public class CatModel
             Field f2 = c.getDeclaredField("mCallbacks");
             f2.setAccessible(true);
             ArrayList list = (ArrayList) f2.get(p);
-            Log.d(TAG, "Log: " + list.size());
 
             for (WeakReference<OnPropertyChangedCallback> callback : mCallBacks) {
                 OnPropertyChangedCallback onCall = callback.get();
@@ -79,7 +79,8 @@ public class CatModel
                     mCallBacks.remove(callback);
                 }
             }
-            Log.d(TAG, "Log: " + mCallBacks.size());
+            if (isDebug) Log.d("wzk>>>", TAG + ": Log:" + list.size());
+            if (isDebug) Log.d("wzk>>>", TAG + ": Log:" + mCallBacks.size());
 
 
         } catch (Exception e) {
@@ -97,6 +98,10 @@ public class CatModel
 
     @Override
     public void addOnPropertyChangedCallback(@NonNull OnPropertyChangedCallback callback) {
+        if (!isShard) {
+            super.addOnPropertyChangedCallback(callback);
+            return;
+        }
         if (mCallBacks == null) {
             mCallBacks = new ArrayList<>();
         }

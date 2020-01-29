@@ -35,6 +35,7 @@ public class CatViewModel<T extends CatBaseView>
     private List<Observable.OnPropertyChangedCallback> mDependCallBack;
     private WeakReference<T> view;
     private OnNoticeAnnHelp mAnnNoticeHelp;
+    private boolean isShard = false;
 
     //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<  Field  <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>  Constructor  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -64,7 +65,7 @@ public class CatViewModel<T extends CatBaseView>
     @Override
     public void bindView(T v) {
         view = new WeakReference<>(v);
-        
+
     }
 
     @Override
@@ -88,6 +89,8 @@ public class CatViewModel<T extends CatBaseView>
         }
         mDependCallBack.add(callback);
     }
+
+
 
     //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<  Method protect  <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>  Method private  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>

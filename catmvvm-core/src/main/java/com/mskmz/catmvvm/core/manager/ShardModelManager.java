@@ -7,16 +7,12 @@ import android.util.Log;
 import android.util.SparseArray;
 
 import androidx.annotation.NonNull;
-import androidx.databinding.DataBindingUtil;
-import androidx.databinding.Observable;
-import androidx.databinding.ViewDataBinding;
 
 import com.mskmz.catmvvm.core.Utils.IdUtils;
 import com.mskmz.catmvvm.core.annotaion.CatAutoInjection;
 import com.mskmz.catmvvm.core.annotaion.CatAutoWire;
 import com.mskmz.catmvvm.core.constant.CatConfig;
-import com.mskmz.catmvvm.core.m.CatModel;
-import com.mskmz.catmvvm.core.vm.CatViewModel;
+import com.mskmz.catmvvm.core.inter.CatBaseModel;
 
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
@@ -200,8 +196,8 @@ public class ShardModelManager {
         Object obj = null;
         try {
             obj = clazz.newInstance();
-            if (CatModel.class.isAssignableFrom(clazz)) {
-                Method mPCreate = CatModel.class.getDeclaredMethod("singleCreate");
+            if (CatBaseModel.class.isAssignableFrom(clazz)) {
+                Method mPCreate = CatBaseModel.class.getDeclaredMethod("shardCreate");
                 mPCreate.invoke(obj);
             }
         } catch (IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException e) {
