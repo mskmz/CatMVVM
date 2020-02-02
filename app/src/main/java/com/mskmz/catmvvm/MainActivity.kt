@@ -5,14 +5,22 @@ import android.util.Log
 import com.mskmz.catmvvm.core.v.CatActivity
 import com.mskmz.catmvvm.databinding.ActivityMainBinding
 import kotlinx.android.synthetic.main.activity_main.*
+import java.lang.ref.WeakReference
 
 class MainActivity : CatActivity<ActivityMainBinding>() {
     override fun init() {
         super.init()
+        Log.d("MainActivity", "init")
+        TestCheckLive.INSTANCE().mActivity = WeakReference(this);
+        TestCheckLive.INSTANCE().mAmb = WeakReference(db);
         btn_next.setOnClickListener {
-            var i = Intent(this@MainActivity, NewActivity::class.java)
-            startActivity(i)
-            finish()
+            startActivity(
+                Intent(
+                    this@MainActivity,
+                    NewActivity::class.java
+                )
+            )
+            this@MainActivity.finish()
         }
     }
 

@@ -35,14 +35,17 @@ public class CatViewModel<T extends CatBaseView>
     private List<Observable.OnPropertyChangedCallback> mDependCallBack;
     private WeakReference<T> view;
     private OnNoticeAnnHelp mAnnNoticeHelp;
-    private boolean isShard = false;
 
     //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<  Field  <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>  Constructor  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
     public CatViewModel() {
         mAnnNoticeHelp = new OnNoticeAnnHelp(this);
+        if (isDebug)
+            Log.d("wzk>>>", TAG + ": CatViewModel:  check " + this.getClass().getSimpleName() + " start");
         ShardModelManager.INSTANCE().checkClass(this);
+        if (isDebug)
+            Log.d("wzk>>>", TAG + ": CatViewModel:  check " + this.getClass().getSimpleName() + "end");
         init();
     }
     //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<  Constructor  <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -89,7 +92,6 @@ public class CatViewModel<T extends CatBaseView>
         }
         mDependCallBack.add(callback);
     }
-
 
 
     //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<  Method protect  <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

@@ -1,6 +1,7 @@
 package com.mskmz.catmvvm.core.v;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,6 +22,12 @@ public class CatActivity
         <DB extends ViewDataBinding>
         extends AppCompatActivity
         implements CatBaseView<DB> {
+
+    //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>  TAG  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    private static final String TAG = "CatActivity>>>";
+    private static final boolean isDebug = true;
+    //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<  TAG  <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
     //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>  Static Final >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
     //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<  Static Final <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>  Field  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -45,9 +52,11 @@ public class CatActivity
                         this,
                         ClassUtils.getParaClass(this.getClass(), 0).getSimpleName()
                 ));
+        if (isDebug) Log.d("wzk>>>", TAG + ": onCreate: 4");
         bindVm();
-
+        if (isDebug) Log.d("wzk>>>", TAG + ": onCreate: 5");
         init();
+        if (isDebug) Log.d("wzk>>>", TAG + ": onCreate: 6");
     }
 
     @Override
