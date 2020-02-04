@@ -21,8 +21,6 @@ class MainActivity2 : AppCompatActivity() {
             this,
             R.layout.activity_test_main
         )
-        TestCheckLive.INSTANCE().mActivity = WeakReference(this)
-        TestCheckLive.INSTANCE().mAmb = WeakReference(db)
         tweak = TestListen(Ta(), 1)
         Thread(Runnable {
             var ref: Reference<out Ta?>?

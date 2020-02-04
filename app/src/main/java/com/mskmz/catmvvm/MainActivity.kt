@@ -11,8 +11,6 @@ class MainActivity : CatActivity<ActivityMainBinding>() {
     override fun init() {
         super.init()
         Log.d("MainActivity", "init")
-        TestCheckLive.INSTANCE().mActivity = WeakReference(this);
-        TestCheckLive.INSTANCE().mAmb = WeakReference(db);
         btn_next.setOnClickListener {
             startActivity(
                 Intent(
