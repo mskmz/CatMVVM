@@ -5,6 +5,19 @@
 由于时间原因，大量的代码使用了反射进行类的加载与方法的调用，对于性能有所介意的请勿使用，有能力的同学也可以改用apt去重构相关类
 ## 导入
 [![](https://jitpack.io/v/mskmz/CatMVVM.svg)](https://jitpack.io/#mskmz/CatMVVM)
+```
+   allprojects {
+    repositories {
+        maven { url 'https://jitpack.io' }
+    }
+   }
+```
+```
+    dependencies {
+       implementation 'com.github.mskmz:CatMVVM:V1.0.0'
+    }
+```
+
 ## 功能
 精简了重复性较高的代码逻辑  如布局和vm的引入 
 可以通过如下的代码声明一个类
@@ -20,8 +33,8 @@
     @CatAutoInjection
     lateinit var baseModel: BaseModel
 ```
-使用注解注册notice的响应
+使用注解注册notice的传值
 ```
-        @CatOnNoticeListen(NOTICE_MSG)
-    var testName = ObservableField<String>("11")
+    @CatOnNoticeListen(NOTICE_MSG)
+    var testName = ObservableField<String>("notice_value")
 ```
