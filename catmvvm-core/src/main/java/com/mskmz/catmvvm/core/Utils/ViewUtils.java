@@ -1,6 +1,7 @@
 package com.mskmz.catmvvm.core.Utils;
 
 import android.content.Context;
+import android.util.ArrayMap;
 import android.util.Log;
 
 import androidx.databinding.ViewDataBinding;
@@ -51,7 +52,7 @@ public class ViewUtils {
     }
 
     public static Map<String, CatBaseViewModel> bindVmList(ViewDataBinding db, CatBaseView view, List<VmBinderBean> vmBinderBeanList) throws InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
-        Map<String, CatBaseViewModel> vmMap = null;
+        Map<String, CatBaseViewModel> vmMap = new HashMap<>();
         if (vmBinderBeanList == null) {
             return vmMap;
         }
@@ -76,9 +77,7 @@ public class ViewUtils {
                     CaseFormat.LOWER_CAMEL,
                     vmBinderBean.method.getName().replaceFirst("set", "")
             );
-            if (vmMap == null) {
-                vmMap = new HashMap<>();
-            }
+
             vmMap.put(vmName, (CatBaseViewModel) oVm);
         }
         return vmMap;

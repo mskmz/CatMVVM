@@ -1,2 +1,2 @@
-include ':app', ':catmvvm-core', ':catmvvm-base'
+include ':app', ':catmvvm-core', ':catmvvm-support-rv'
 rootProject.name='CatMvvm'
